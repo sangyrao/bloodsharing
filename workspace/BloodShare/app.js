@@ -185,6 +185,9 @@ function sendSMS(mob) {
     });
 }
 
+app.get("/Login",function(req,res){
+   res.render("Login");
+});
 app.post("/info", function(req, res) {
     Users.find({}, function(err, docs) {
         if (err) {
@@ -237,17 +240,22 @@ app.get("/donor", function(req, res) {
     res.render("donor", { currentUser: req.user });
 });
 
-app.get("/donor", function(req, res) {
-    res.render("donor");
+
+
+
+app.get("/donor",isLoggedIn,function(req,res){
+   res.render("donor"); 
 });
-
-
-
 
 app.get("/Signup", function(req, res) {
     res.render("Signup");
 });
-
+app.post("/Login",passport.authenticate("local",{
+    successRedirect :"/donor",
+    failureRedirect: "/Login"
+    }),function(req,res){
+      
+});
 
 //handling user sign up
 app.post("/Signup", function(req, res) {
@@ -270,11 +278,12 @@ app.post("/Signup", function(req, res) {
             req.flash("error", "Signup Failed...Please Try Again!!");
             return res.render('Signup');
         }
-        //passport.authenticate("local")(req, res, function() {
-        else{
-            req.flash("success", "You have Sucessfully Signed Up!!!");
-            res.redirect("/");
-        }
+         passport.authenticate("local")(req, res, function(){
+            
+           res.redirect("/");
+           req.flash("success","You have Sucessfully Signed Up!!!");
+        });
+        
         //});
     
     });
@@ -285,7 +294,56 @@ app.post("/Signup", function(req, res) {
     }
     
 });
+app.get("/Delete",function(req,res){
+   res.render("Delete",{currentUser:req.user});
+   });
+   
+  
+  
+   app.post("/update",function(req,res){
+    var user=req.user.username;
+    
+    if(user == req.body.username1){
+     Users.update({"Dated":req.body.cdate},function(err,docs){
+       if(err){
+           console.log(err);
+       }else{
+           req.flash("success","Your Account is successfully Updated!!");
+           res.redirect("home");
+       }
+   }) ; 
+    }
+});
 
+  
+  
+  
+  
+   
+   app.post("/Delete",function(req,res){
+    var user=req.user.username;
+    if(user == req.body.username){
+     Users.remove({"username":req.body.username},function(err,docs){
+       if(err){
+           console.log(err);
+       }else{
+           req.flash("success","Your Account is successfully Deleted!!");
+           res.redirect("home");
+       }
+   }) ; 
+    }
+});
+
+
+
+
+
+
+app.get("/Logout",function(req,res){
+    req.logout();
+    req.flash("success","Logged You out...!!!");
+    res.redirect("/");
+});
 
 
 

@@ -103,6 +103,7 @@ button:hover, a:hover {
             <%if(!currentUser){%>
               <p><a class=" margin btn btn-primary btn-md nav-bar" href="/home">Home</a>
               <a class="  margin btn btn-primary btn-md" href="/Portfolio">Donors</a>
+              <a class=" margin btn btn-primary btn-md" href="/Login">Login</a>
               <a class=" margin btn btn-primary btn-md" href="/Signup">Signup</a>
                <a class=" margin btn btn-primary btn-md" href="/about">About Us</a>
               <a class=" margin btn btn-primary btn-md" href="/contact">Contact Us</a></p>
@@ -112,6 +113,7 @@ button:hover, a:hover {
                           else{%>
               <li><a>Signed In As <%=currentUser.username%> </a></li>
               <a class=" margin btn btn-primary btn-md nav-bar" href="/home">Home</a>
+                <a class="  margin btn btn-primary btn-md" href="/Logout">Logout</a>
                  <a class=" margin btn btn-primary btn-md" href="/about">About Us</a>
               <a class=" margin btn btn-primary btn-md" href="/contact">Contact Us</a></p>
                <% }%>
